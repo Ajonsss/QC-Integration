@@ -16,29 +16,33 @@ export async function GET() {
 
  // We added items_page to fetch the actual rows (items) from the board
  // We added the 'subscribers' block at the bottom to fetch the team members
-  const query = gql`
-    query {
-      boards(ids: ${boardId}) {
-        name
-        columns {
-          id
-          title
-          type
-          settings_str
-        }
-        items_page(limit: 500) {
-          items {
-            id
-            name
-          }
-        }
-        subscribers {
+const query = gql`
+  query {
+    boards(ids: ${boardId}) {
+      name
+      columns {
+        id
+        title
+        type
+        settings_str
+      }
+      items_page(limit: 500) {
+        items {
           id
           name
+          column_values {
+            id
+            text
+          }
         }
       }
+      subscribers {
+        id
+        name
+      }
     }
-  `;
+  }
+`;
 
   try {
     const data = await client.request(query);
